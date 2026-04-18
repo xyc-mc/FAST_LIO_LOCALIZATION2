@@ -16,8 +16,16 @@ enum LID_TYPE
   AVIA = 1,
   VELO16,
   OUST64,
-  MID360
+  MID360,
+  RS32
 };  //{1, 2, 3}
+enum TIME_UNIT 
+{
+  SEC = 0,
+  MS = 1,
+  US = 2,
+  NS = 3
+};
 enum Feature
 {
   Nor,
@@ -76,6 +84,26 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(velodyne_ros::Point,
     (float, intensity, intensity)
     (float, time, time)
     (uint16_t, ring, ring)
+)
+
+// <--- 新增以下这整段 rs32_ros 命名空间和注册宏
+namespace rs32_ros {
+  typedef struct {
+    float x;
+    float y;
+    float z;
+    float intensity;
+    uint16_t ring;
+    double timestamp;
+  } Point;
+}  // namespace rs32_ros 
+POINT_CLOUD_REGISTER_POINT_STRUCT(rs32_ros::Point,
+    (float, x, x)
+    (float, y, y)
+    (float, z, z)
+    (float, intensity, intensity)
+    (uint16_t, ring, ring)
+    (double, timestamp, timestamp)
 )
 
 namespace ouster_ros {
@@ -159,13 +187,15 @@ class Preprocess
   PointCloudXYZI pl_full, pl_corn, pl_surf;
   PointCloudXYZI pl_buff[128]; //maximum 128 line lidar
   vector<orgtype> typess[128]; //maximum 128 line lidar
-  int lidar_type, point_filter_num, N_SCANS;;
+  float time_unit_scale;           // <--- 新增
+  int lidar_type, point_filter_num, N_SCANS, SCAN_RATE, time_unit; // <--- 把原来的替换为这行（加入了 SCAN_RATE 和 time_unit）
   double blind;
   double max_scan_range;
   bool feature_enabled, given_offset_time;
   // ros::Publisher pub_full, pub_surf, pub_corn;
   
   private:
+  void rs32_handler(const sensor_msgs::msg::PointCloud2::UniquePtr &msg); // <--- 新增
   void avia_handler(const livox_ros_driver2::msg::CustomMsg::UniquePtr &msg);
   void oust64_handler(const sensor_msgs::msg::PointCloud2::UniquePtr &msg);
   void velodyne_handler(const sensor_msgs::msg::PointCloud2::UniquePtr &msg);

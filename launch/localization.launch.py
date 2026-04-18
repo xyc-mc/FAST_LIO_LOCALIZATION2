@@ -29,9 +29,9 @@ def generate_launch_description():
         "config_path", default_value=default_config_path, description="Yaml config file path"
     )
     declare_config_file_cmd = DeclareLaunchArgument(
-        "config_file", default_value="mid360.yaml", description="Config file"
+        "config_file", default_value="helios.yaml", description="Config file"
     )
-    declare_rviz_cmd = DeclareLaunchArgument("rviz", default_value="true", description="Use RViz to monitor results")
+    declare_rviz_cmd = DeclareLaunchArgument("rviz", default_value="false", description="Use RViz to monitor results")
 
     declare_rviz_config_path_cmd = DeclareLaunchArgument(
         "rviz_cfg", default_value=default_rviz_config_path, description="RViz config file path"
@@ -39,7 +39,7 @@ def generate_launch_description():
 
     declare_map_path = DeclareLaunchArgument("map", default_value="", description="Path to PCD map file")
     declare_pcd_map_topic = DeclareLaunchArgument(
-        "pcd_map_topic", default_value="/map", description="Topic to publish PCD map"
+        "pcd_map_topic", default_value="/cloud_pcd", description="Topic to publish PCD map"
     )
     # Load parameters from yaml file
 
