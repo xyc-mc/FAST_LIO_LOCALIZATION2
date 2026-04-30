@@ -29,7 +29,7 @@ def generate_launch_description():
         "config_path", default_value=default_config_path, description="Yaml config file path"
     )
     declare_config_file_cmd = DeclareLaunchArgument(
-        "config_file", default_value="helios.yaml", description="Config file"
+        "config_file", default_value="mid360.yaml", description="Config file"
     )
     declare_rviz_cmd = DeclareLaunchArgument("rviz", default_value="false", description="Use RViz to monitor results")
 
