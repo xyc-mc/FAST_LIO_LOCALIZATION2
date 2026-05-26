@@ -162,7 +162,7 @@ class FastLIOLocalization(Node):
         
         transformation, _ = self.registration_at_scale(scan_tobe_mapped, global_map_in_FOV, initial=pose_estimation, scale=5)
         
-        transformation, fitness = self.registration_at_scale(scan_tobe_mapped, global_map_in_FOV, initial=transformation, scale=1)
+        transformation, fitness = self.registration_at_scale(scan_tobe_mapped, global_map_in_FOV, initial=pose_estimation, scale=1)
         
         if fitness > self.get_parameter("localization_threshold").value:
             self.T_map_to_odom = transformation
