@@ -581,6 +581,7 @@ void publish_odometry(const rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPt
     odomAftMapped.child_frame_id = "body";
     odomAftMapped.header.stamp = get_ros_time(lidar_end_time);
     set_posestamp(odomAftMapped.pose);
+    odomAftMapped.pose.pose.position.z = 0.0;
     pubOdomAftMapped->publish(odomAftMapped);
     auto P = kf.get_P();
     for (int i = 0; i < 6; i++)
@@ -871,7 +872,7 @@ public:
         tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 
         //------------------------------------------------------------------------------------------------------
-        auto period_ms = std::chrono::milliseconds(static_cast<int64_t>(1000.0 / 100.0));
+        auto period_ms = std::chrono::milliseconds(static_cast<int64_t>(5000.0 / 100.0));
         timer_ = rclcpp::create_timer(this, this->get_clock(), period_ms, std::bind(&LaserMappingNode::timer_callback, this));
 
         RCLCPP_INFO(this->get_logger(), "Node init finished.");
