@@ -56,6 +56,7 @@ def generate_launch_description():
         name="global_localization",
         output="screen",
         parameters=[{"map_voxel_size": 0.4,
+                     "use_sim_time": use_sim_time,
                      "scan_voxel_size": 0.1,
                      "freq_localization": 0.5,
                      "freq_global_map": 0.25,
@@ -72,6 +73,7 @@ def generate_launch_description():
         executable="transform_fusion.py",
         name="transform_fusion",
         output="screen",
+        parameters=[{"use_sim_time": use_sim_time}],
     )
     
     # PCD to PointCloud2 publisher
@@ -81,6 +83,7 @@ def generate_launch_description():
         name="map_publisher",
         output="screen",
         parameters=[{"file_name": pcd_map_path,
+                     "use_sim_time": use_sim_time,
                      "tf_frame": "map",
                     "cloud_topic": pcd_map_topic,
                     "period_ms_": 500}],
@@ -89,7 +92,13 @@ def generate_launch_description():
         ]
     )
 
-    rviz_node = Node(package="rviz2", executable="rviz2", arguments=["-d", rviz_cfg], condition=IfCondition(rviz_use))
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        arguments=["-d", rviz_cfg],
+        parameters=[{"use_sim_time": use_sim_time}],
+        condition=IfCondition(rviz_use),
+    )
 
     ld = LaunchDescription()
     ld.add_action(declare_use_sim_time_cmd)
